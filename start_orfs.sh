@@ -3,8 +3,10 @@
 # --- Configuration ---
 # Set the name of the Docker image for OpenROAD Flow Scripts
 # You can find the latest image tag on https://hub.docker.com/r/openroad/flow-scripts/tags
+ORFS_IMAGE="miloudias/orfs-custom:latest"
 # ORFS_IMAGE="openroad/orfs:latest"
-ORFS_IMAGE="orfs-custom:latest"
+
+# ORFS_IMAGE="orfs-custom:latest"
 # Set the path to your local directory where you want to save your design files.
 # The script will create this directory if it doesn't exist.
 DESIGNS_DIR="${HOME}/eda/orfs_designs"
@@ -17,9 +19,9 @@ mkdir -p "${DESIGNS_DIR}"
 
 # Check if X server is available
 if [ -z "$DISPLAY" ]; then
-	echo "ERROR: The DISPLAY environment variable is not set."
-	echo "Please ensure you are running this script from a graphical session."
-	exit 1
+  echo "ERROR: The DISPLAY environment variable is not set."
+  echo "Please ensure you are running this script from a graphical session."
+  exit 1
 fi
 
 # Give Docker container access to your X server
@@ -34,11 +36,11 @@ xhost +local:docker
 # 	"${ORFS_IMAGE}"
 
 ${TERMINAL} docker run -it --rm \
-	-v "${DESIGNS_DIR}:/designs" \
-	-v /tmp/.X11-unix:/tmp/.X11-unix \
-	-e DISPLAY=$DISPLAY \
-	-w "/designs" \
-	--user $(id -u):$(id -g) \
-	"${ORFS_IMAGE}"
+  -v "${DESIGNS_DIR}:/designs" \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  -e DISPLAY=$DISPLAY \
+  -w "/designs" \
+  --user $(id -u):$(id -g) \
+  "${ORFS_IMAGE}"
 
 sleep 1
